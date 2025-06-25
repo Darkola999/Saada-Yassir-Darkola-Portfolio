@@ -628,7 +628,8 @@ export default function Portfolio() {
                     <div className="relative max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                       <div className="bg-black/90 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl">
                         {(() => {
-                          const category = skillCategories[selectedPlanet]
+                          type PlanetKey = keyof typeof skillCategories;
+                          const category = skillCategories[selectedPlanet as PlanetKey];
                           const skills = skillsByCategory[selectedPlanet] || []
                           const CategoryIcon = category.icon
 

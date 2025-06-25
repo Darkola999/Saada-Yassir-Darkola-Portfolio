@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { PerformanceMonitor } from "@/components/performance-monitor"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Saada Yassir - 3D Developer Portfolio",
