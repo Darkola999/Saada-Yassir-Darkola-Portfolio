@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -113,114 +112,140 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
   }
 
   return (
-    <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500">
-      <nav className="relative">
-        {/* Dynamic Island/Notch Container */}
-        <div
-          className={`bg-gradient-to-r ${styles.container} backdrop-blur-2xl rounded-full border border-white/20 shadow-2xl transition-all duration-500 hover:shadow-white/10`}
-        >
-          <div className="flex items-center justify-between px-6 py-3">
-            {/* Left Navigation */}
-            <div className="hidden lg:flex items-center space-x-6">
-              {navItems.slice(0, 2).map((item) => {
-                const ItemComponent = item.href ? Link : "button"
-                const itemProps = item.href ? { href: item.href } : { onClick: () => handleItemClick(item) }
+      <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500">
+        <nav className="relative">
+          <div
+              className={`bg-gradient-to-r ${styles.container} backdrop-blur-2xl rounded-full border border-white/20 shadow-2xl transition-all duration-500 hover:shadow-white/10`}
+          >
+            <div className="flex items-center justify-between px-6 py-3">
+              {/* Left Navigation */}
+              <div className="hidden lg:flex items-center space-x-6">
+                {navItems.slice(0, 2).map((item) =>
+                    item.href ? (
+                        <Link
+                            key={item.id}
+                            href={item.href}
+                            className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
+                                isItemActive(item) ? styles.active : styles.inactive
+                            }`}
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                    ) : (
+                        <button
+                            key={item.id}
+                            onClick={() => handleItemClick(item)}
+                            className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
+                                isItemActive(item) ? styles.active : styles.inactive
+                            }`}
+                            type="button"
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.label}</span>
+                        </button>
+                    )
+                )}
+              </div>
 
-                return (
-                  <ItemComponent
-                    key={item.id}
-                    {...itemProps}
-                    className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
-                      isItemActive(item) ? styles.active : styles.inactive
-                    }`}
+              {/* Centered Logo */}
+              <Link href="/" className="flex items-center space-x-3 group cursor-pointer mx-6">
+                <div className="relative transform-gpu">
+                  <div
+                      className={`w-10 h-10 bg-gradient-to-br ${styles.logo} rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-lg relative overflow-hidden`}
                   >
-                    <item.icon className="w-4 h-4" />
-                    <span>{item.label}</span>
-                  </ItemComponent>
-                )
-              })}
-            </div>
-
-            {/* Centered Logo */}
-            <Link href="/" className="flex items-center space-x-3 group cursor-pointer mx-6">
-              <div className="relative transform-gpu">
-                <div
-                  className={`w-10 h-10 bg-gradient-to-br ${styles.logo} rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-500 shadow-lg relative overflow-hidden`}
-                >
-                  <Code2 className="text-black w-5 h-5 group-hover:rotate-12 transition-transform duration-500 relative z-10" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-full"></div>
+                    <Code2 className="text-black w-5 h-5 group-hover:rotate-12 transition-transform duration-500 relative z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent rounded-full"></div>
+                  </div>
                 </div>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className={`text-lg font-bold bg-gradient-to-r ${styles.logoText} bg-clip-text text-transparent`}>
-                  Saada Yassir
-                </h1>
-              </div>
-            </Link>
+                <div className="hidden sm:block">
+                  <h1 className={`text-lg font-bold bg-gradient-to-r ${styles.logoText} bg-clip-text text-transparent`}>
+                    Saada Yassir
+                  </h1>
+                </div>
+              </Link>
 
-            {/* Right Navigation */}
-            <div className="hidden lg:flex items-center space-x-6">
-              {navItems.slice(2).map((item) => {
-                const ItemComponent = item.href ? Link : "button"
-                const itemProps = item.href ? { href: item.href } : { onClick: () => handleItemClick(item) }
+              {/* Right Navigation */}
+              <div className="hidden lg:flex items-center space-x-6">
+                {navItems.slice(2).map((item) =>
+                    item.href ? (
+                        <Link
+                            key={item.id}
+                            href={item.href}
+                            className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
+                                isItemActive(item) ? styles.active : styles.inactive
+                            }`}
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.label}</span>
+                        </Link>
+                    ) : (
+                        <button
+                            key={item.id}
+                            onClick={() => handleItemClick(item)}
+                            className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
+                                isItemActive(item) ? styles.active : styles.inactive
+                            }`}
+                            type="button"
+                        >
+                          <item.icon className="w-4 h-4" />
+                          <span>{item.label}</span>
+                        </button>
+                    )
+                )}
+              </div>
 
-                return (
-                  <ItemComponent
-                    key={item.id}
-                    {...itemProps}
-                    className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
-                      isItemActive(item) ? styles.active : styles.inactive
-                    }`}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    <span>{item.label}</span>
-                  </ItemComponent>
-                )
-              })}
+              {/* Theme Toggle & Mobile Menu */}
+              <div className="flex items-center space-x-3">
+                <ThemeToggle />
+
+                {/* Mobile Menu Button */}
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className="lg:hidden w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
+                >
+                  {isMenuOpen ? <X className="h-4 w-4 text-white" /> : <Menu className="h-4 w-4 text-white" />}
+                </Button>
+              </div>
             </div>
 
-            {/* Theme Toggle & Mobile Menu */}
-            <div className="flex items-center space-x-3">
-              <ThemeToggle />
-
-              {/* Mobile Menu Button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300"
-              >
-                {isMenuOpen ? <X className="h-4 w-4 text-white" /> : <Menu className="h-4 w-4 text-white" />}
-              </Button>
-            </div>
+            {/* Mobile Navigation Dropdown */}
+            {isMenuOpen && (
+                <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-black/95 backdrop-blur-2xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+                  <div className="flex flex-col p-4 space-y-2">
+                    {navItems.map((item) =>
+                        item.href ? (
+                            <Link
+                                key={item.id}
+                                href={item.href}
+                                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                                    isItemActive(item) ? "text-black bg-white" : "text-white/80 hover:text-white hover:bg-white/10"
+                                }`}
+                            >
+                              <item.icon className="w-5 h-5" />
+                              <span className="font-medium">{item.label}</span>
+                            </Link>
+                        ) : (
+                            <button
+                                key={item.id}
+                                onClick={() => handleItemClick(item)}
+                                className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                                    isItemActive(item) ? "text-black bg-white" : "text-white/80 hover:text-white hover:bg-white/10"
+                                }`}
+                                type="button"
+                            >
+                              <item.icon className="w-5 h-5" />
+                              <span className="font-medium">{item.label}</span>
+                            </button>
+                        )
+                    )}
+                  </div>
+                </div>
+            )}
           </div>
-
-          {/* Mobile Navigation Dropdown */}
-          {isMenuOpen && (
-            <div className="lg:hidden absolute top-full left-0 right-0 mt-2 bg-black/95 backdrop-blur-2xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
-              <div className="flex flex-col p-4 space-y-2">
-                {navItems.map((item) => {
-                  const ItemComponent = item.href ? Link : "button"
-                  const itemProps = item.href ? { href: item.href } : { onClick: () => handleItemClick(item) }
-
-                  return (
-                    <ItemComponent
-                      key={item.id}
-                      {...itemProps}
-                      className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-                        isItemActive(item) ? "text-black bg-white" : "text-white/80 hover:text-white hover:bg-white/10"
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-medium">{item.label}</span>
-                    </ItemComponent>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
-    </header>
+        </nav>
+      </header>
   )
 }

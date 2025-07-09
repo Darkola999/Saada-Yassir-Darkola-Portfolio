@@ -15,7 +15,7 @@ interface Particle {
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle[]>([])
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -67,8 +67,8 @@ export function ParticleBackground() {
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fillStyle = `${particle.color}${Math.floor(particle.opacity * 255)
-          .toString(16)
-          .padStart(2, "0")}`
+            .toString(16)
+            .padStart(2, "0")}`
         ctx.fill()
 
         // Draw connections
@@ -82,8 +82,8 @@ export function ParticleBackground() {
             ctx.moveTo(particle.x, particle.y)
             ctx.lineTo(otherParticle.x, otherParticle.y)
             ctx.strokeStyle = `${particle.color}${Math.floor((1 - distance / 120) * 0.15 * 255)
-              .toString(16)
-              .padStart(2, "0")}`
+                .toString(16)
+                .padStart(2, "0")}`
             ctx.lineWidth = 0.5
             ctx.stroke()
           }
@@ -111,6 +111,6 @@ export function ParticleBackground() {
   }, [])
 
   return (
-    <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ background: "transparent" }} />
+      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ background: "transparent" }} />
   )
 }
