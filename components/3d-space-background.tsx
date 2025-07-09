@@ -26,7 +26,8 @@ export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const starsRef = useRef<Star[]>([])
   const planetsRef = useRef<Planet[]>([])
-
+  const animationRef = useRef<number>()
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -34,187 +35,95 @@ export function SpaceBackground() {
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
+    ctxRef.current = ctx
 
     const resizeCanvas = () => {
+      if (!canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
 
     const createStars = () => {
+      if (!canvas) return
       const stars: Star[] = []
-      for (let i = 0; i < 1500; i++) {
+      for (let i = 0; i < 200; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           z: Math.random() * 1000,
-          size: Math.random() * 3 + 0.5,
-          speed: Math.random() * 0.8 + 0.2,
-          opacity: Math.random() * 0.8 + 0.2,
-          twinkle: Math.random() * Math.PI * 2,
+          size: Math.random() * 2,
+          speed: 0.5 + Math.random() * 1,
+          opacity: Math.random(),
+          twinkle: Math.random() * 0.02
         })
       }
       starsRef.current = stars
     }
 
     const createPlanets = () => {
+      if (!canvas) return
       const planets: Planet[] = []
-      const colors = ["#22c55e", "#10b981", "#16a34a", "#059669", "#047857", "#065f46"]
+      const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
 
       for (let i = 0; i < 4; i++) {
         planets.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          z: Math.random() * 500 + 100,
-          size: Math.random() * 70 + 30,
-          speed: Math.random() * 0.15 + 0.05,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: 0,
+          z: Math.random() * 1000,
+          size: 10 + Math.random() * 20,
+          speed: 0.2 + Math.random() * 0.3,
+          color: colors[i],
+          rotation: Math.random() * Math.PI * 2
         })
       }
       planetsRef.current = planets
     }
 
-    const drawStar = (star: Star, time: number) => {
-      const x = star.x
-      const y = star.y
-      const size = (star.size * 1000) / (star.z + 1000)
-
-      // Enhanced 3D star effect with green twinkling
-      const twinkleIntensity = Math.sin(time * 0.003 + star.twinkle) * 0.5 + 0.5
-      const finalOpacity = star.opacity * (1000 / (star.z + 1000)) * twinkleIntensity
-
-      // Main star body (white core)
-      ctx.beginPath()
-      ctx.arc(x, y, size, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255, 255, 255, ${finalOpacity * 0.9})`
-      ctx.fill()
-
-      // Green glowing outline
-      ctx.beginPath()
-      ctx.arc(x, y, size * 1.2, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(255, 255, 255, ${finalOpacity * 0.8})`
-      ctx.lineWidth = 0.5
-      ctx.stroke()
-
-      // Add 3D cross effect for larger stars
-      if (size > 1.5) {
-        const crossSize = size * 2.5
-        ctx.beginPath()
-        ctx.moveTo(x - crossSize, y)
-        ctx.lineTo(x + crossSize, y)
-        ctx.moveTo(x, y - crossSize)
-        ctx.lineTo(x, y + crossSize)
-        ctx.strokeStyle = `rgba(255, 255, 255, ${finalOpacity * 0.9})`
-        ctx.lineWidth = 0.8
-        ctx.stroke()
-
-        // Green glow for special stars
-        if (twinkleIntensity > 0.8) {
-          ctx.beginPath()
-          ctx.arc(x, y, size * 2, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(255, 255, 255, ${finalOpacity * 0.3})`
-          ctx.fill()
-        }
-      }
-    }
-
-    const drawPlanet = (planet: Planet) => {
-      const size = (planet.size * 1000) / (planet.z + 1000)
-      const x = planet.x
-      const y = planet.y
-
-      // Planet with black core and green accents
-      const gradient = ctx.createRadialGradient(x - size * 0.3, y - size * 0.3, 0, x, y, size)
-      gradient.addColorStop(0, "#000000")
-      gradient.addColorStop(0.4, planet.color + "60")
-      gradient.addColorStop(0.8, planet.color + "40")
-      gradient.addColorStop(1, "#000000")
-
-      ctx.beginPath()
-      ctx.arc(x, y, size, 0, Math.PI * 2)
-      ctx.fillStyle = gradient
-      ctx.fill()
-
-      // Add planet rings for some planets
-      if (Math.random() > 0.6) {
-        ctx.beginPath()
-        ctx.ellipse(x, y, size * 1.8, size * 0.4, planet.rotation, 0, Math.PI * 2)
-        ctx.strokeStyle = planet.color + "80"
-        ctx.lineWidth = 2
-        ctx.stroke()
-      }
-
-      planet.rotation += 0.008
-    }
-
     const animate = () => {
-      const time = Date.now()
+      if (!canvas || !ctxRef.current) return
 
-      // Create deep black space background
-      ctx.fillStyle = "#000000"
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctxRef.current.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Add subtle green nebula effects
-      const nebulaGradient1 = ctx.createRadialGradient(
-        canvas.width * 0.2,
-        canvas.height * 0.3,
-        0,
-        canvas.width * 0.2,
-        canvas.height * 0.3,
-        400,
-      )
-      nebulaGradient1.addColorStop(0, "rgba(34, 197, 94, 0.08)")
-      nebulaGradient1.addColorStop(1, "rgba(34, 197, 94, 0)")
-
-      ctx.fillStyle = nebulaGradient1
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      const nebulaGradient2 = ctx.createRadialGradient(
-        canvas.width * 0.8,
-        canvas.height * 0.7,
-        0,
-        canvas.width * 0.8,
-        canvas.height * 0.7,
-        350,
-      )
-      nebulaGradient2.addColorStop(0, "rgba(16, 185, 129, 0.06)")
-      nebulaGradient2.addColorStop(1, "rgba(16, 185, 129, 0)")
-
-      ctx.fillStyle = nebulaGradient2
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      // Animate and draw stars with 3D effects
-      starsRef.current.forEach((star) => {
+      // Animate stars
+      starsRef.current.forEach(star => {
         star.z -= star.speed
-        star.twinkle += 0.02
+        star.opacity += star.twinkle
 
         if (star.z <= 0) {
           star.z = 1000
           star.x = Math.random() * canvas.width
           star.y = Math.random() * canvas.height
         }
-        drawStar(star, time)
+
+        const scale = 1000 / star.z
+        const x = (star.x - canvas.width / 2) * scale + canvas.width / 2
+        const y = (star.y - canvas.height / 2) * scale + canvas.height / 2
+
+        ctxRef.current!.beginPath()
+        ctxRef.current!.fillStyle = `rgba(255, 255, 255, ${Math.sin(star.opacity)})`
+        ctxRef.current!.arc(x, y, star.size * scale, 0, Math.PI * 2)
+        ctxRef.current!.fill()
       })
 
-      // Animate and draw planets
-      planetsRef.current.forEach((planet) => {
+      // Animate planets
+      planetsRef.current.forEach(planet => {
+        planet.rotation += 0.01
         planet.z -= planet.speed
-        planet.x += Math.sin(time * 0.0008 + planet.z * 0.01) * 0.3
-        planet.y += Math.cos(time * 0.0008 + planet.z * 0.01) * 0.2
 
         if (planet.z <= 0) {
-          planet.z = 500
+          planet.z = 1000
           planet.x = Math.random() * canvas.width
           planet.y = Math.random() * canvas.height
         }
 
-        // Keep planets in bounds
-        if (planet.x < -150) planet.x = canvas.width + 150
-        if (planet.x > canvas.width + 150) planet.x = -150
-        if (planet.y < -150) planet.y = canvas.height + 150
-        if (planet.y > canvas.height + 150) planet.y = -150
+        const scale = 1000 / planet.z
+        const x = (planet.x - canvas.width / 2) * scale + canvas.width / 2
+        const y = (planet.y - canvas.height / 2) * scale + canvas.height / 2
 
-        drawPlanet(planet)
+        ctxRef.current!.beginPath()
+        ctxRef.current!.fillStyle = planet.color
+        ctxRef.current!.arc(x, y, planet.size * scale, 0, Math.PI * 2)
+        ctxRef.current!.fill()
       })
 
       animationRef.current = requestAnimationFrame(animate)
@@ -242,6 +151,10 @@ export function SpaceBackground() {
   }, [])
 
   return (
-    <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" style={{ background: "transparent" }} />
+      <canvas
+          ref={canvasRef}
+          className="fixed inset-0 pointer-events-none z-0"
+          style={{ background: "transparent" }}
+      />
   )
 }
