@@ -1,5 +1,3 @@
-"use client"
-
 interface PreloadOptions {
   priority?: boolean
   sizes?: string
@@ -66,9 +64,11 @@ export const imagePreloader = new ImagePreloader()
 
 // Preload critical images
 export function preloadCriticalImages() {
+  if (typeof window === 'undefined') return
+
   const criticalImages = [
-    "/placeholder.svg?height=200&width=150", // Hero image
-    "/placeholder.svg?height=20&width=20", // Facebook logo
+    "/placeholder.svg?height=200&width=150",
+    "/placeholder.svg?height=20&width=20",
   ]
 
   imagePreloader.preloadMultiple(criticalImages).catch(console.warn)

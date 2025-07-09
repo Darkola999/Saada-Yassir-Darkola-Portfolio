@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, Clock, ArrowRight, Eye } from "lucide-react"
 import { LazyImage } from "@/components/lazy-image"
 
+
+
 interface BlogPost {
   id: string
   title: string

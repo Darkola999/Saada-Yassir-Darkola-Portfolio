@@ -16,7 +16,8 @@ if (process.env.NODE_ENV !== "production") {
 
 // Server-side Supabase client
 export const createServerClient = () => {
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey
+  return createClient(supabaseUrl, serviceKey)
 }
 
 // Database types
@@ -50,6 +51,7 @@ export interface BlogPost {
   content: string
   image_url?: string
   published: boolean
+  featured?: boolean
   created_at: string
   updated_at: string
   tags: string[]

@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createContactMessage } from "@/lib/database"
+import { createServerClient } from "@/lib/supabase"
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,20 +17,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 })
     }
 
+    const supabase = createServerClient()
+
     // Create contact message in database
-    const contactMessage = await createContactMessage({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      subject: subject?.trim() || null,
-      message: message.trim(),
-    })
+    const { data: contactMessage, error } = await supabase
+        .from('contact_messages')
+        .insert({
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          subject: subject?.trim() || null,
+          message: message.trim(),
+          status: 'unread'
+        })
+        .select()
+        .single()
+
+    if (error) {
+      console.error("Database error:", error)
+      return NextResponse.json({ error: "Failed to save message" }, { status: 500 })
+    }
 
     return NextResponse.json(
-      {
-        message: "Contact message sent successfully",
-        id: contactMessage.id,
-      },
-      { status: 201 },
+        {
+          message: "Contact message sent successfully",
+          id: contactMessage.id,
+        },
+        { status: 201 },
     )
   } catch (error) {
     console.error("Contact form error:", error)
