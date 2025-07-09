@@ -26,7 +26,7 @@ export function SpaceBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const starsRef = useRef<Star[]>([])
   const planetsRef = useRef<Planet[]>([])
-  const animationRef = useRef<number>()
+  const animationRef = useRef<number | null>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   useEffect(() => {
@@ -38,13 +38,11 @@ export function SpaceBackground() {
     ctxRef.current = ctx
 
     const resizeCanvas = () => {
-      if (!canvas) return
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
 
     const createStars = () => {
-      if (!canvas) return
       const stars: Star[] = []
       for (let i = 0; i < 200; i++) {
         stars.push({
@@ -61,7 +59,6 @@ export function SpaceBackground() {
     }
 
     const createPlanets = () => {
-      if (!canvas) return
       const planets: Planet[] = []
       const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
 
@@ -80,7 +77,7 @@ export function SpaceBackground() {
     }
 
     const animate = () => {
-      if (!canvas || !ctxRef.current) return
+      if (!ctxRef.current) return
 
       ctxRef.current.clearRect(0, 0, canvas.width, canvas.height)
 
