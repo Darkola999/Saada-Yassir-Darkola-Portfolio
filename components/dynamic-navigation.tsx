@@ -124,7 +124,7 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                     item.href ? (
                         <Link
                             key={item.id}
-                            href={item.href}
+                            href={item.href as string}
                             className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
                                 isItemActive(item) ? styles.active : styles.inactive
                             }`}
@@ -139,7 +139,6 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                             className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
                                 isItemActive(item) ? styles.active : styles.inactive
                             }`}
-                            type="button"
                         >
                           <item.icon className="w-4 h-4" />
                           <span>{item.label}</span>
@@ -171,7 +170,7 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                     item.href ? (
                         <Link
                             key={item.id}
-                            href={item.href}
+                            href={item.href as string}
                             className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
                                 isItemActive(item) ? styles.active : styles.inactive
                             }`}
@@ -186,7 +185,6 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                             className={`relative font-medium text-sm transition-all duration-300 hover:scale-105 group flex items-center space-x-2 px-3 py-2 rounded-full ${
                                 isItemActive(item) ? styles.active : styles.inactive
                             }`}
-                            type="button"
                         >
                           <item.icon className="w-4 h-4" />
                           <span>{item.label}</span>
@@ -219,12 +217,12 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                         item.href ? (
                             <Link
                                 key={item.id}
-                                href={item.href}
+                                href={item.href as string}
                                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
                                     isItemActive(item) ? "text-black bg-white" : "text-white/80 hover:text-white hover:bg-white/10"
                                 }`}
                             >
-                              <item.icon className="w-5 h-5" />
+                              <item.icon className="w-4 h-4" />
                               <span className="font-medium">{item.label}</span>
                             </Link>
                         ) : (
@@ -234,9 +232,8 @@ export function DynamicNavigation({ activeSection, onSectionClick, variant = "sp
                                 className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${
                                     isItemActive(item) ? "text-black bg-white" : "text-white/80 hover:text-white hover:bg-white/10"
                                 }`}
-                                type="button"
                             >
-                              <item.icon className="w-5 h-5" />
+                              <item.icon className="w-4 h-4" />
                               <span className="font-medium">{item.label}</span>
                             </button>
                         )
